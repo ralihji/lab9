@@ -1,0 +1,430 @@
+{
+  "info": {
+    "name": "SEG3502 Lab 9 : Temperature Converter (Basic Auth)",
+    "description": "Vérifie que chaque requête à l'API exige l'authentification Basic. Importable dans Postman et Insomnia. Démarrer l'API avec ./gradlew bootRun avant d'envoyer les requêtes.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Sans identifiants",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/temperature-converter/celsius-fahrenheit/50",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "temperature-converter",
+            "celsius-fahrenheit",
+            "50"
+          ]
+        },
+        "description": "401 attendu",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('401 attendu', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "pm.test('En-tête WWW-Authenticate: Basic', function () {",
+              "    pm.expect(pm.response.headers.get('WWW-Authenticate')).to.include('Basic');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Mauvais mot de passe (user1 / wrong)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/temperature-converter/celsius-fahrenheit/50",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "temperature-converter",
+            "celsius-fahrenheit",
+            "50"
+          ]
+        },
+        "description": "401 attendu",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "user1",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "wrong",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('401 attendu', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "pm.test('En-tête WWW-Authenticate: Basic', function () {",
+              "    pm.expect(pm.response.headers.get('WWW-Authenticate')).to.include('Basic');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. user1 / pass1 : Celsius vers Fahrenheit",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/temperature-converter/celsius-fahrenheit/50",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "temperature-converter",
+            "celsius-fahrenheit",
+            "50"
+          ]
+        },
+        "description": "200 attendu, réponse 122.0",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "user1",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "pass1",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 attendu, réponse 122.0', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.text()).to.eql('122.0');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. user1 / pass1 : Fahrenheit vers Celsius",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/temperature-converter/fahrenheit-celsius/122",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "temperature-converter",
+            "fahrenheit-celsius",
+            "122"
+          ]
+        },
+        "description": "200 attendu, réponse 50.0",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "user1",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "pass1",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 attendu, réponse 50.0', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.text()).to.eql('50.0');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. user2 / pass2 : Celsius vers Fahrenheit",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/temperature-converter/celsius-fahrenheit/50",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "temperature-converter",
+            "celsius-fahrenheit",
+            "50"
+          ]
+        },
+        "description": "200 attendu, réponse 122.0",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "user2",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "pass2",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 attendu, réponse 122.0', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.text()).to.eql('122.0');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. user2 / pass2 : Fahrenheit vers Celsius",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/temperature-converter/fahrenheit-celsius/122",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "temperature-converter",
+            "fahrenheit-celsius",
+            "122"
+          ]
+        },
+        "description": "200 attendu, réponse 50.0",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "user2",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "pass2",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 attendu, réponse 50.0', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.text()).to.eql('50.0');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Mot de passe de l'autre compte (user2 / pass1)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/temperature-converter/celsius-fahrenheit/50",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "temperature-converter",
+            "celsius-fahrenheit",
+            "50"
+          ]
+        },
+        "description": "401 attendu",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "user2",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "pass1",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('401 attendu', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "pm.test('En-tête WWW-Authenticate: Basic', function () {",
+              "    pm.expect(pm.response.headers.get('WWW-Authenticate')).to.include('Basic');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Valeur invalide (user1 / pass1)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/temperature-converter/celsius-fahrenheit/abc",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "temperature-converter",
+            "celsius-fahrenheit",
+            "abc"
+          ]
+        },
+        "description": "400 attendu, Unable to process request",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "user1",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "pass1",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 attendu, Unable to process request', function () {",
+              "    pm.response.to.have.status(400);",
+              "    pm.expect(pm.response.text()).to.eql('Unable to process request');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Documentation OpenAPI sans identifiants",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/v3/api-docs",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "v3",
+            "api-docs"
+          ]
+        },
+        "description": "401 attendu",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('401 attendu', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "pm.test('En-tête WWW-Authenticate: Basic', function () {",
+              "    pm.expect(pm.response.headers.get('WWW-Authenticate')).to.include('Basic');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

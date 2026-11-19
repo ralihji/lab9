@@ -1,0 +1,40 @@
+### SEG3502 Laboratoire 9 : requêtes de vérification de l'authentification Basic
+### Utilisable avec IntelliJ IDEA (HTTP Client) ou VS Code (extension REST Client).
+### Démarrer l'API d'abord : ./gradlew bootRun
+
+@host = http://localhost:8080
+
+### 1. Sans identifiants : 401 Unauthorized (WWW-Authenticate: Basic)
+GET {{host}}/temperature-converter/celsius-fahrenheit/50
+
+### 2. Mauvais mot de passe : 401 Unauthorized
+GET {{host}}/temperature-converter/celsius-fahrenheit/50
+Authorization: Basic user1 wrong
+
+### 3. user1 / pass1 : 200, réponse 122.0
+GET {{host}}/temperature-converter/celsius-fahrenheit/50
+Authorization: Basic user1 pass1
+
+### 4. user2 / pass2 : 200, réponse 50.0
+GET {{host}}/temperature-converter/fahrenheit-celsius/122
+Authorization: Basic user2 pass2
+
+### 5. user1 / pass1 sur l'autre route : 200, réponse 50.0
+GET {{host}}/temperature-converter/fahrenheit-celsius/122
+Authorization: Basic user1 pass1
+
+### 6. user2 / pass2 sur l'autre route : 200, réponse 122.0
+GET {{host}}/temperature-converter/celsius-fahrenheit/50
+Authorization: Basic user2 pass2
+
+### 7. Mot de passe de l'autre compte : 401 Unauthorized
+GET {{host}}/temperature-converter/celsius-fahrenheit/50
+Authorization: Basic user2 pass1
+
+### 8. Authentifié mais valeur invalide : 400 « Unable to process request »
+GET {{host}}/temperature-converter/celsius-fahrenheit/abc
+Authorization: Basic user1 pass1
+
+### 9. Documentation OpenAPI (JSON), elle aussi protégée : 200 avec identifiants
+GET {{host}}/v3/api-docs
+Authorization: Basic user1 pass1
